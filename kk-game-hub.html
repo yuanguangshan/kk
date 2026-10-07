@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK新基地 · 游戏库</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  }
+
+  body {
+    background: radial-gradient(ellipse at 50% 120%, #1b2a5e 0%, #0d1330 45%, #05070f 100%);
+    position: relative;
+  }
+
+  /* ---------- 星空背景 ---------- */
+  .stars, .stars2, .stars3 {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle var(--dur) ease-in-out var(--delay) infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: .15; transform: scale(.8); }
+    50%      { opacity: 1;   transform: scale(1.15); }
+  }
+  /* 流星 */
+  .meteor {
+    position: fixed;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px 2px rgba(255,255,255,.7);
+    animation: meteor-fall linear infinite;
+    pointer-events: none;
+  }
+  @keyframes meteor-fall {
+    0%   { transform: translate(0,0) rotate(-45deg); opacity: 1; }
+    70%  { opacity: 1; }
+    100% { transform: translate(-60vw, 60vh) rotate(-45deg); opacity: 0; }
+  }
+
+  /* ---------- 顶部彩虹闪光条 ---------- */
+  .rainbow-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 10px;
+    background: linear-gradient(90deg,
+      #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff,
+      #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff);
+    background-size: 200% 100%;
+    animation: rainbow-flow 6s linear infinite;
+    box-shadow: 0 0 18px 3px rgba(255,255,255,.35);
+    z-index: 10;
+  }
+  /* 扫光 */
+  .rainbow-bar::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 30%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent);
+    animation: shine-sweep 2.8s ease-in-out infinite;
+  }
+  @keyframes rainbow-flow {
+    from { background-position: 0% 0; }
+    to   { background-position: 200% 0; }
+  }
+  @keyframes shine-sweep {
+    0%   { left: -30%; }
+    100% { left: 100%; }
+  }
+
+  /* ---------- 标题 ---------- */
+  .site-title {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    margin-top: 9vh;
+    font-size: clamp(40px, 7vw, 72px);
+    font-weight: 900;
+    letter-spacing: .12em;
+    background: linear-gradient(90deg, #ff5f6d, #ffc371, #7bffcb, #6ab7ff, #c86bff, #ff5f6d);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: title-flow 8s linear infinite;
+    filter: drop-shadow(0 0 14px rgba(140,120,255,.55));
+  }
+  @keyframes title-flow {
+    from { background-position: 0% 0; }
+    to   { background-position: 300% 0; }
+  }
+  .site-sub {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    margin-top: 10px;
+    color: #9fb2e8;
+    font-size: clamp(13px, 1.6vw, 17px);
+    letter-spacing: .35em;
+  }
+
+  /* ---------- 游戏方块 ---------- */
+  .games {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(24px, 5vw, 64px);
+    margin-top: 9vh;
+    flex-wrap: wrap;
+    padding: 0 20px;
+  }
+  .game-card {
+    width: clamp(180px, 24vw, 260px);
+    height: clamp(180px, 24vw, 260px);
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-decoration: none;
+    color: #fff;
+    font-size: clamp(20px, 2.4vw, 28px);
+    font-weight: 800;
+    letter-spacing: .1em;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 30px rgba(0,0,0,.45), inset 0 0 24px rgba(255,255,255,.05);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .game-card .icon { font-size: clamp(44px, 6vw, 64px); line-height: 1; }
+  .game-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, var(--glow), transparent 70%);
+    opacity: .35;
+    transition: opacity .25s ease;
+  }
+  .game-card:hover {
+    transform: translateY(-8px) scale(1.05);
+    border-color: var(--glow);
+    box-shadow: 0 14px 44px rgba(0,0,0,.55), 0 0 34px var(--glow);
+  }
+  .game-card:hover::before { opacity: .8; }
+  .game-card.mario { --glow: rgba(255,90,90,.75); }
+  .game-card.sea   { --glow: rgba(80,170,255,.75); }
+
+  .tip {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    margin-top: 7vh;
+    color: #6f7ea8;
+    font-size: 13px;
+    letter-spacing: .2em;
+  }
+</style>
+</head>
+<body>
+
+  <!-- 顶部彩虹闪光条 -->
+  <div class="rainbow-bar"></div>
+
+  <!-- 标题 -->
+  <h1 class="site-title">KK新基地</h1>
+  <p class="site-sub">★ 游 戏 库 ★</p>
+
+  <!-- 游戏方块 -->
+  <div class="games">
+    <a class="game-card mario" href="https://pic.want.biz/wyk20.html" target="_blank" rel="noopener">
+      <span class="icon">🍄</span>
+      <span>超级马里奥</span>
+    </a>
+    <a class="game-card sea" href="https://pic.want.biz/kz/index.html" target="_blank" rel="noopener">
+      <span class="icon">✈️</span>
+      <span>海空战</span>
+    </a>
+  </div>
+
+  <p class="tip">点击方块即可开始游戏</p>
+
+<script>
+  // 生成三层星空
+  function makeStars(container, count, sizeMin, sizeMax) {
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = (Math.random() * (sizeMax - sizeMin) + sizeMin).toFixed(1);
+      s.style.width = s.style.height = size + 'px';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.setProperty('--dur', (Math.random() * 3 + 2).toFixed(2) + 's');
+      s.style.setProperty('--delay', (Math.random() * 4).toFixed(2) + 's');
+      container.appendChild(s);
+    }
+  }
+  makeStars(document.createElement('div'), 0, 0, 0); // no-op 保持结构清晰
+  const layers = [
+    { n: 90, min: 1,   max: 2   },
+    { n: 60, min: 1.5, max: 2.5 },
+    { n: 30, min: 2,   max: 3.2 }
+  ];
+  const wrap = document.body;
+  layers.forEach(l => {
+    const c = document.createElement('div');
+    c.className = 'stars';
+    wrap.insertBefore(c, wrap.firstChild);
+    makeStars(c, l.n, l.min, l.max);
+  });
+
+  // 流星
+  for (let i = 0; i < 4; i++) {
+    const m = document.createElement('div');
+    m.className = 'meteor';
+    m.style.left = (Math.random() * 80 + 15) + 'vw';
+    m.style.top = (Math.random() * 30) + 'vh';
+    m.style.animationDuration = (Math.random() * 4 + 5).toFixed(2) + 's';
+    m.style.animationDelay = (Math.random() * 8).toFixed(2) + 's';
+    document.body.appendChild(m);
+  }
+</script>
+</body>
+</html>

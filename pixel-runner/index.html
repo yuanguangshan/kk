@@ -2181,9 +2181,9 @@ function resize() {
   const chromeH = IS_TOUCH ? 176 : 84;
   const pad = 8;
   const availW = innerWidth - (IS_TOUCH ? 8 : 24), availH = innerHeight - chromeH - pad;
+  // 等比放大铺满可用宽度（高度放不下时按高度回退），触屏/非触屏同规则，不再取 0.5 整倍
   let s = Math.min(availW / W, availH / H);
-  if (IS_TOUCH) s = Math.max(0.4, Math.min(s, 4));        // 手机上非整数缩放，优先占满屏宽
-  else s = Math.max(0.5, Math.min(s >= 1 ? Math.floor(s * 2) / 2 : s, 6));
+  s = Math.max(IS_TOUCH ? 0.4 : 0.5, Math.min(s, IS_TOUCH ? 4 : 6));
   cv.style.width = Math.round(W * s) + 'px';
   cv.style.height = Math.round(H * s) + 'px';
 }

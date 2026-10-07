@@ -185,7 +185,7 @@
     txt(ctx, onSpd ? 'SPD OK' : (relSpd > 82 ? 'SPD +' : 'SPD -'), cx - 150, vy0 + vh + 14, onSpd ? C.g : C.a, 11, 'center');
     if (near) {
       txt(ctx, 'STABILIZED — LAND', cx, vy0 - 22, C.a, 13, 'center', true);
-      txt(ctx, 'DECK ' + Math.round(lz) + 'm', cx, vy0 - 40, C.wd, 11, 'center');
+      txt(ctx, 'DECK ' + Math.round(range) + 'm', cx, vy0 - 40, C.wd, 11, 'center');
     }
     ctx.restore();
   }

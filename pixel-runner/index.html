@@ -1391,8 +1391,8 @@ function checkWorld(l) {
     // 碰到旗杆或越过旗杆都算过关，避免跳跃时从旗杆上方飞过去
     const f = { x: l.flag.x, y: l.flag.y - 44, w: 16, h: 58 };
     if (player.x > l.flag.x || overlaps(pb, f)) {
-      // 第 4 关：boss 没倒下之前到不了终点
-      if (GAME.levelIndex === 3 && !BOSS.win) { GAME.banner = { text: '先打败 BOSS！', t: 90 }; player.x = Math.min(player.x, l.flag.x - 24); return; }
+      // 第 24 关：boss 没倒下之前到不了终点
+      if (GAME.levelIndex === 23 && !BOSS.win) { GAME.banner = { text: '先打败 BOSS！', t: 90 }; player.x = Math.min(player.x, l.flag.x - 24); return; }
       levelClear(); return;
     }
   }
@@ -1595,7 +1595,7 @@ function nextLevel() {
   }
 }
 
-/* ---------------- 第 4 关 BOSS ----------------
+/* ---------------- 第 24 关 BOSS ----------------
    跑到 3/4 处触发：boss 每 5 秒放一次技能（蘑菇下压 / 生成魔怪 / 紫色蘑菇下压 / 地雷），
    每个技能只存在 5 秒。撑满 100 秒就算赢，终点才开放。 */
 const BOSS = { active: false, t: 0, skillT: 0, next: 0, hazards: [], win: false };
@@ -1685,8 +1685,8 @@ function update() {
     updatePlayer(l);
     updateMovers(l);
     updateEnemies(l);
-    // 第 4 关（index 3）跑到 3/4 处触发 BOSS
-    if (GAME.levelIndex === 3 && !BOSS.active && !BOSS.win && player.x > l.w * T * 0.75) bossStart();
+    // 第 24 关（index 23）跑到 3/4 处触发 BOSS
+    if (GAME.levelIndex === 23 && !BOSS.active && !BOSS.win && player.x > l.w * T * 0.75) bossStart();
     updateBoss(l);
     checkWorld(l);
     const tx = clamp(player.x - W / 2 + player.w / 2, 0, l.w * T - W);
